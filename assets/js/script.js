@@ -13,7 +13,7 @@ which will then be used in fetch from one call on openweather to get todays date
 save geocoding data to json and then use variables from this in search fecth for one call api - DONE
 
 underneath this is an empty area that will be filled by buttons containing past cities searched for, if they are clicked they
-will then search for that city again 
+will then search for that city again - DONE except for changing display to that city
 
 On other part of page there are two elements:
 First shows a section that highlights todays weather and includes date, city name, icon of weather, temperature, humidity,
@@ -23,7 +23,7 @@ Underneath this is next 5 day forecast. 5 cards will be created dynamically show
 date, icon of weather, temperature, wind speed and humidity
 
 Cities will be saved to local storage when searched for and this will be what is used to create the button in search list 
-to search again.
+to search again - DONE
 
 */
 
@@ -59,6 +59,7 @@ function getWeather(event) {
     localStorage.setItem("savedCity", JSON.stringify(savedCity));
 
     btn = document.createElement("a");
+    //need to set so when button pressed it changes display
     btn.textContent = cityStorage
     btn.classList.add('btn', 'btn-light')
     
@@ -90,29 +91,10 @@ function getWeather(event) {
         });
 }
 
-// function fetchData(){
-    
-// }
-
-// const savedCity = JSON.parse(localStorage.getItem("savedCity")) || [];
-
-// function renderCities(){
-//     //loops through hS object and shows this as a list on leaderboard
-//     for (var i = 0; i < savedCity.length; i++){
-//         var newCity = savedCity[i];
-
-//         var btn = document.createElement("li");
-//         btn.textContent = newCity
-//         btn.classList.add('btn', 'btn-light')
-
-//         historyEl.appendChild(btn)
-//     }
-// }
-
 // capitalise first letter of search for city for when data presented
-var cityUsed = function capitalise(s) {
-    return s[0].toUpperCase() + s.slice(1);
-}
+// var cityUsed = function capitalise(s) {
+//     return s[0].toUpperCase() + s.slice(1);
+// }
 
 function renderCities() {
     savedCity = JSON.parse(localStorage.getItem("savedCity")) || [];
