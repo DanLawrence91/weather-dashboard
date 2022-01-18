@@ -32,26 +32,37 @@ to search again.
 var APIKey = "68f6f76ac8c1ec3fb198c68558825996"
 var submitForm = document.querySelector("#search-form")
 
-function getLongLat(event) {
+function getWeather(event) {
     event.preventDefault();
 
     var citySearch = document.querySelector("#city-search").value
     var queryLongLatURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
 
     console.log(queryLongLatURL)
-
-    var requestUrl = queryLongLatURL;
   
-    fetch(requestUrl)
+    fetch(queryLongLatURL)
       .then(function (response) {
         return response.json();
       })
       .then(function (data) {
         //Using console.log to examine the data
-        console.log(data)
-        console.log(data[0].lat)
-        console.log(data[0].lon);
+
+        var cityURL = 'https://api.openweathermap.org/data/2.5/onecall?' + 'lat=' + data[0].lat + '&lon=' + data[0].lon + '&exclude=minutely,hourly,alerts&units=metric&appid=' + APIKey
+        //console.log(cityURL)
+        console.log(citySearch)
+        return fetch(cityURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data.current.temp)
+            console.log(data.current.humidity)
+            console.log(data.current.wind_speed)
+            console.log(data.current.uvi)
+            console.log(data.current.weather.icon)
+        })
         });
+       
 }
 
-submitForm.addEventListener("submit", getLongLat)
+submitForm.addEventListener("submit", getWeather)
