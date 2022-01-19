@@ -33,13 +33,44 @@ var cityStorage;
 var historyEl = document.querySelector("#weather-history")
 var savedCity;
 var btn;
+var temp;
+var humidity;
+var windSpeed;
+var uvi;
+var citySearch;
+var todayWeather = document.querySelector("#today-weather")
+var weatherForecast = document.querySelector("#five-day-weather")
+
+function printWeather() {
+    var weatherData = document.createElement('div');
+    weatherData.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+
+    var weatherBody = document.createElement('div');
+    weatherBody.classList.add('card-body');
+    weatherData.append(weatherBody);
+
+    var cityEl = document.createElement('h3');
+    cityEl.textContent = citySearch
+
+    var bodyContentEl = document.createElement('p');
+
+    // var weatherIcon = data.current.weather.icon
+
+    bodyContentEl.innerHTML += '<strong>Temp:</strong> ' + temp + '<br/>';
+    bodyContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + windSpeed + '<br/>';
+    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + humidity + '<br/>';
+    bodyContentEl.innerHTML += '<strong>UV Index:</strong> ' + uvi + '<br/>';
+    weatherBody.append(cityEl, bodyContentEl);
+
+    todayWeather.append(weatherData);
+}
 
 function getWeather(event) {
     event.preventDefault();
 
-    var citySearch = document.querySelector("#city-search").value
-    
-    console.log(cityUsed(citySearch))
+    citySearch = document.querySelector("#city-search").value
+
+    console.log(citySearch)
     var queryLongLatURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
 
     console.log(queryLongLatURL)
@@ -61,34 +92,39 @@ function getWeather(event) {
     btn = document.createElement("a");
     //need to set so when button pressed it changes display
     btn.textContent = cityStorage
-    btn.classList.add('btn', 'btn-light')
-    
+    btn.classList.add('btn', 'btn-light', 'm-2', 'w-100')
+
     historyEl.appendChild(btn)
 
     console.log(savedCity)
     console.log(savedCity.length)
-        
 
-    fetch(queryLongLatURL)
+    fetchWeather(queryLongLatURL)
+}
+
+function fetchWeather(URL) {
+    
+    fetch(URL)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
             var cityURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + data[0].lat + '&lon=' + data[0].lon + '&exclude=minutely,hourly,alerts&units=metric&appid=' + APIKey
 
-            console.log(citySearch)
             return fetch(cityURL)
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (data) {
-                    console.log(data.current.temp)
-                    console.log(data.current.humidity)
-                    console.log(data.current.wind_speed)
-                    console.log(data.current.uvi)
-                    console.log(data.current.weather.icon)
+                    temp = data.current.temp
+                    humidity = data.current.humidity
+                    windSpeed = data.current.wind_speed
+                    uvi = data.current.uvi
+
+                    printWeather(data)
                 })
         });
+    
 }
 
 // capitalise first letter of search for city for when data presented
@@ -98,15 +134,15 @@ function getWeather(event) {
 
 function renderCities() {
     savedCity = JSON.parse(localStorage.getItem("savedCity")) || [];
-    for (var i = 0; i < savedCity.length; i++){
-    var newCity = savedCity[i];
-    console.log(newCity)
-    
-    btn = document.createElement("a");
-    btn.textContent = newCity.city
-    btn.classList.add('btn', 'btn-light')
-    
-    historyEl.appendChild(btn)
+    for (var i = 0; i < savedCity.length; i++) {
+        var newCity = savedCity[i];
+        //console.log(newCity)
+
+        btn = document.createElement("a");
+        btn.textContent = newCity.city
+        btn.classList.add('btn', 'btn-light', 'm-2', 'w-100')
+
+        historyEl.appendChild(btn)
     }
 }
 renderCities()
