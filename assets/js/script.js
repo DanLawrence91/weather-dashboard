@@ -8,7 +8,7 @@ to search for city use openweather api, to get the one call data need longitude 
 to get longitiude and latitude use geocoding section of openweather api - DONE
 
 this means fetch by city name from search box, this goes to openweather geocoding to get longitude and latitude for that city,
-which will then be used in fetch from one call on openweather to get todays date and 5 day forecast - DONE except for 5 day
+which will then be used in fetch from one call on openweather to get todays date and 5 day forecast - DONE 
 
 save geocoding data to json and then use variables from this in search fecth for one call api - DONE
 
@@ -17,10 +17,10 @@ will then search for that city again - DONE except for changing display to that 
 
 On other part of page there are two elements:
 First shows a section that highlights todays weather and includes date, city name, icon of weather, temperature, humidity,
-wind speed and uv index. UV index is color coded based on severity. Use if else statement for color - DONE except for icon and color coding UVI
+wind speed and uv index. UV index is color coded based on severity. Use if else statement for color - DONE 
 
 Underneath this is next 5 day forecast. 5 cards will be created dynamically showing the following data:
-date, icon of weather, temperature, wind speed and humidity
+date, icon of weather, temperature, wind speed and humidity - DONE
 
 Cities will be saved to local storage when searched for and this will be what is used to create the button in search list 
 to search again - DONE
@@ -68,7 +68,7 @@ function printWeather() {
     uviData.innerHTML = uvi
     uviData.setAttribute("style", "cursor:auto")
 
-    uviEl.innerHTML = '<strong>UV Index:</strong> '
+    uviEl.innerHTML = 'UV Index: '
     uviEl.append(uviData)
 
     if (uvi <= 4){
@@ -81,9 +81,9 @@ function printWeather() {
 
     // var weatherIcon = data.current.weather.icon
 
-    bodyContentEl.innerHTML += '<strong>Temp:</strong> ' + temp + ' °F <br/>';
-    bodyContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + windSpeed + ' MPH <br/>';
-    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + humidity + ' % <br/>';
+    bodyContentEl.innerHTML += 'Temp: ' + temp + ' °F <br/>';
+    bodyContentEl.innerHTML += 'Wind Speed: ' + windSpeed + ' MPH <br/>';
+    bodyContentEl.innerHTML += 'Humidity: ' + humidity + ' % <br/>';
     
     weatherBody.append(cityEl, bodyContentEl, uviEl);
 
@@ -157,10 +157,10 @@ function fetchWeather(URL) {
                         fiveWeatherIcon = data.daily[i].weather[0].icon
 
                         var weatherForecastData = document.createElement('div');
-                        weatherForecastData.classList.add('card', 'bg-light', 'text-dark', 'mb-3');
+                        weatherForecastData.classList.add('card', 'bg-light', 'text-dark', 'm-1');
 
                         var weatherForecastBody = document.createElement('div');
-                        weatherForecastBody.classList.add('card-body');
+                        weatherForecastBody.classList.add('card-body', 'p-2');
                         weatherForecastData.append(weatherForecastBody);
 
                         var dateEl = document.createElement('h4');
@@ -174,9 +174,9 @@ function fetchWeather(URL) {
 
                         var bodyForecastContentEl = document.createElement('p');
 
-                        bodyForecastContentEl.innerHTML += '<strong>Temp:</strong> ' + fiveTemp + ' °F <br/>';
-                        bodyForecastContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + fiveWindSpeed + ' MPH <br/>';
-                        bodyForecastContentEl.innerHTML += '<strong>Humidity:</strong> ' + fiveHumidity + ' % <br/>';
+                        bodyForecastContentEl.innerHTML += 'Temp: ' + fiveTemp + ' °F <br/>';
+                        bodyForecastContentEl.innerHTML += 'Wind Speed: ' + fiveWindSpeed + ' MPH <br/>';
+                        bodyForecastContentEl.innerHTML += 'Humidity: ' + fiveHumidity + ' % <br/>';
                         weatherForecastBody.append(dateEl, iconForecastEl, bodyForecastContentEl);
 
                         weatherForecast.append(weatherForecastData);
@@ -187,8 +187,6 @@ function fetchWeather(URL) {
                     windSpeed = data.current.wind_speed
                     uvi = data.current.uvi
                     weatherIcon = data.current.weather[0].icon
-                    console.log(data)
-                    console.log(weatherIcon)
 
                     printWeather(data)
                 })
@@ -215,4 +213,4 @@ function renderCities() {
 }
 renderCities()
 submitForm.addEventListener("submit", getWeather)
-// btn.addEventListener("click", getWeather)
+btn.addEventListener("click", )
