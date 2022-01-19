@@ -37,10 +37,12 @@ var temp;
 var humidity;
 var windSpeed;
 var uvi;
+var weatherIcon;
 var fiveTemp;
 var fiveHumidity;
 var fiveWindSpeed;
-var citySearch
+var fiveWeatherIcon;
+var citySearch;
 var todayWeather = document.querySelector("#today-weather")
 var weatherForecast = document.querySelector("#five-day-weather")
 
@@ -49,23 +51,26 @@ function printWeather() {
     weatherData.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
 
     var weatherBody = document.createElement('div');
-    weatherBody.classList.add('card-body');
+    weatherBody.classList.add('card-body', 'p-2');
     weatherData.append(weatherBody);
 
     var cityEl = document.createElement('h3');
     var date = moment().format("Do MMMM YYYY")
+    var iconEl = document.createElement('img')
+    iconEl.src = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
     cityEl.textContent = citySearch + ", " + date
+    cityEl.append(iconEl)
 
     var bodyContentEl = document.createElement('p');
     var uviEl = document.createElement('p')
     var uviData = document.createElement('p') 
     uviData.classList.add('btn')
     uviData.innerHTML = uvi
+    uviData.setAttribute("style", "cursor:auto")
 
     uviEl.innerHTML = '<strong>UV Index:</strong> '
     uviEl.append(uviData)
 
-    console.log(uviEl)
     if (uvi <= 4){
         uviData.classList.add('btn-success');
     } else if (uvi <= 9 && uvi > 4){
@@ -79,7 +84,6 @@ function printWeather() {
     bodyContentEl.innerHTML += '<strong>Temp:</strong> ' + temp + ' °F <br/>';
     bodyContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + windSpeed + ' MPH <br/>';
     bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + humidity + ' % <br/>';
-    
     
     weatherBody.append(cityEl, bodyContentEl, uviEl);
 
@@ -150,6 +154,7 @@ function fetchWeather(URL) {
                         fiveTemp = data.daily[i].temp.day
                         fiveHumidity = data.daily[i].humidity
                         fiveWindSpeed = data.daily[i].wind_speed
+                        fiveWeatherIcon = data.daily[i].weather[0].icon
 
                         var weatherForecastData = document.createElement('div');
                         weatherForecastData.classList.add('card', 'bg-light', 'text-dark', 'mb-3');
@@ -163,14 +168,16 @@ function fetchWeather(URL) {
                         var futureText = futureDate.format("Do MMMM YYYY")
                         dateEl.textContent = futureText
 
-                        var bodyForecastContentEl = document.createElement('p');
 
-                        // var weatherIcon = data.current.weather.icon
+                        var iconForecastEl = document.createElement('img')
+                        iconForecastEl.src = "http://openweathermap.org/img/wn/" + fiveWeatherIcon + "@2x.png"
+
+                        var bodyForecastContentEl = document.createElement('p');
 
                         bodyForecastContentEl.innerHTML += '<strong>Temp:</strong> ' + fiveTemp + ' °F <br/>';
                         bodyForecastContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + fiveWindSpeed + ' MPH <br/>';
                         bodyForecastContentEl.innerHTML += '<strong>Humidity:</strong> ' + fiveHumidity + ' % <br/>';
-                        weatherForecastBody.append(dateEl, bodyForecastContentEl);
+                        weatherForecastBody.append(dateEl, iconForecastEl, bodyForecastContentEl);
 
                         weatherForecast.append(weatherForecastData);
                     }
@@ -179,6 +186,9 @@ function fetchWeather(URL) {
                     humidity = data.current.humidity
                     windSpeed = data.current.wind_speed
                     uvi = data.current.uvi
+                    weatherIcon = data.current.weather[0].icon
+                    console.log(data)
+                    console.log(weatherIcon)
 
                     printWeather(data)
                 })
