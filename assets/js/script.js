@@ -43,9 +43,12 @@ var fiveHumidity;
 var fiveWindSpeed;
 var fiveWeatherIcon;
 var citySearch;
+var i;
 var todayWeather = document.querySelector("#today-weather")
 var weatherForecast = document.querySelector("#five-day-weather")
 
+// function to print the weather for the city on the day searched for. Dynamically create a card showing different bits of 
+// information about the weather on that day
 function printWeather() {
     var weatherData = document.createElement('div');
     weatherData.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
@@ -63,7 +66,7 @@ function printWeather() {
 
     var bodyContentEl = document.createElement('p');
     var uviEl = document.createElement('p')
-    var uviData = document.createElement('p') 
+    var uviData = document.createElement('p')
     uviData.classList.add('btn')
     uviData.innerHTML = uvi
     uviData.setAttribute("style", "cursor:auto")
@@ -71,20 +74,18 @@ function printWeather() {
     uviEl.innerHTML = 'UV Index: '
     uviEl.append(uviData)
 
-    if (uvi <= 4){
+    if (uvi <= 4) {
         uviData.classList.add('btn-success');
-    } else if (uvi <= 9 && uvi > 4){
+    } else if (uvi <= 9 && uvi > 4) {
         uviData.classList.add('btn-warning');
     } else {
         uviData.classList.add('btn-danger');
     }
 
-    // var weatherIcon = data.current.weather.icon
-
     bodyContentEl.innerHTML += 'Temp: ' + temp + ' °F <br/>';
     bodyContentEl.innerHTML += 'Wind Speed: ' + windSpeed + ' MPH <br/>';
     bodyContentEl.innerHTML += 'Humidity: ' + humidity + ' % <br/>';
-    
+
     weatherBody.append(cityEl, bodyContentEl, uviEl);
 
     var titleEl = document.createElement('h3');
@@ -93,11 +94,44 @@ function printWeather() {
     todayWeather.append(weatherData, titleEl);
 }
 
+// function to print the forecast for next 5 days of weather for that city dynamically. Cards created based on inforamtion entered
+// to show different bits of information about the weather for next 5 days
+function printForecast() {
+    var weatherForecastData = document.createElement('div');
+    weatherForecastData.classList.add('card', 'bg-light', 'text-dark', 'm-1');
+
+    var weatherForecastBody = document.createElement('div');
+    weatherForecastBody.classList.add('card-body', 'p-2');
+    weatherForecastData.append(weatherForecastBody);
+
+    var dateEl = document.createElement('h4');
+    var futureDate = moment().add(i, 'days')
+    var futureText = futureDate.format("Do MMMM YYYY")
+    dateEl.textContent = futureText
+
+
+    var iconForecastEl = document.createElement('img')
+    iconForecastEl.src = "http://openweathermap.org/img/wn/" + fiveWeatherIcon + "@2x.png"
+
+    var bodyForecastContentEl = document.createElement('p');
+
+    bodyForecastContentEl.innerHTML += 'Temp: ' + fiveTemp + ' °F <br/>';
+    bodyForecastContentEl.innerHTML += 'Wind Speed: ' + fiveWindSpeed + ' MPH <br/>';
+    bodyForecastContentEl.innerHTML += 'Humidity: ' + fiveHumidity + ' % <br/>';
+    weatherForecastBody.append(dateEl, iconForecastEl, bodyForecastContentEl);
+
+    weatherForecast.append(weatherForecastData);
+}
+
+// function to clear the information from the page when a new search is made
 function clearPastSearch() {
     todayWeather.innerHTML = ""
     weatherForecast.innerHTML = ""
 }
 
+// function to ensure a city is searched for and if data already on display that this is cleared prior to showing new data
+// also calls the fetch function and provides the url for that function based on city searched for
+// this function also saves the searches to local storage so that they can be logged in search history
 function getWeather(event) {
     event.preventDefault();
 
@@ -136,6 +170,8 @@ function getWeather(event) {
     fetchWeather(queryLongLatURL)
 }
 
+// function to fetch the weather data for the city called for and to call the function to print the data to the page
+// searches for longitude and latitude based on city name search which then uses this data to get weather info for that city
 function fetchWeather(URL) {
 
     fetch(URL)
@@ -150,36 +186,13 @@ function fetchWeather(URL) {
                     return response.json();
                 })
                 .then(function (data) {
-                    for (var i = 1; i <= 5; i++) {
+                    for (i = 1; i <= 5; i++) {
                         fiveTemp = data.daily[i].temp.day
                         fiveHumidity = data.daily[i].humidity
                         fiveWindSpeed = data.daily[i].wind_speed
                         fiveWeatherIcon = data.daily[i].weather[0].icon
 
-                        var weatherForecastData = document.createElement('div');
-                        weatherForecastData.classList.add('card', 'bg-light', 'text-dark', 'm-1');
-
-                        var weatherForecastBody = document.createElement('div');
-                        weatherForecastBody.classList.add('card-body', 'p-2');
-                        weatherForecastData.append(weatherForecastBody);
-
-                        var dateEl = document.createElement('h4');
-                        var futureDate = moment().add(i, 'days')
-                        var futureText = futureDate.format("Do MMMM YYYY")
-                        dateEl.textContent = futureText
-
-
-                        var iconForecastEl = document.createElement('img')
-                        iconForecastEl.src = "http://openweathermap.org/img/wn/" + fiveWeatherIcon + "@2x.png"
-
-                        var bodyForecastContentEl = document.createElement('p');
-
-                        bodyForecastContentEl.innerHTML += 'Temp: ' + fiveTemp + ' °F <br/>';
-                        bodyForecastContentEl.innerHTML += 'Wind Speed: ' + fiveWindSpeed + ' MPH <br/>';
-                        bodyForecastContentEl.innerHTML += 'Humidity: ' + fiveHumidity + ' % <br/>';
-                        weatherForecastBody.append(dateEl, iconForecastEl, bodyForecastContentEl);
-
-                        weatherForecast.append(weatherForecastData);
+                        printForecast(data)
                     }
 
                     temp = data.current.temp
@@ -199,18 +212,22 @@ function fetchWeather(URL) {
 //     return s[0].toUpperCase() + s.slice(1);
 // }
 
+// prints the city to search history bar from local storage
 function renderCities() {
     savedCity = JSON.parse(localStorage.getItem("savedCity")) || [];
-    for (var i = 0; i < savedCity.length; i++) {
+    for (i = 0; i < savedCity.length; i++) {
         var newCity = savedCity[i];
 
-        btn = document.createElement("a");
+        btn = document.createElement("button");
         btn.textContent = newCity.city
         btn.classList.add('btn', 'btn-light', 'm-2', 'w-100')
 
         historyEl.appendChild(btn)
     }
 }
+
 renderCities()
 submitForm.addEventListener("submit", getWeather)
-btn.addEventListener("click", )
+btn.addEventListener("click", function () {
+    
+})
