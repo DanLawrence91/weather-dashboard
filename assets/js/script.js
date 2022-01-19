@@ -17,7 +17,7 @@ will then search for that city again - DONE except for changing display to that 
 
 On other part of page there are two elements:
 First shows a section that highlights todays weather and includes date, city name, icon of weather, temperature, humidity,
-wind speed and uv index. UV index is color coded based on severity. Use if else statement for color
+wind speed and uv index. UV index is color coded based on severity. Use if else statement for color - DONE except for icon and color coding UVI
 
 Underneath this is next 5 day forecast. 5 cards will be created dynamically showing the following data:
 date, icon of weather, temperature, wind speed and humidity
@@ -50,25 +50,34 @@ function printWeather() {
     weatherData.append(weatherBody);
 
     var cityEl = document.createElement('h3');
-    cityEl.textContent = citySearch
+    var date = moment().format("Do MMMM YYYY")
+    cityEl.textContent = citySearch + ", " + date
 
     var bodyContentEl = document.createElement('p');
 
     // var weatherIcon = data.current.weather.icon
 
-    bodyContentEl.innerHTML += '<strong>Temp:</strong> ' + temp + '<br/>';
-    bodyContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + windSpeed + '<br/>';
-    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + humidity + '<br/>';
+    bodyContentEl.innerHTML += '<strong>Temp:</strong> ' + temp + ' °F <br/>';
+    bodyContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + windSpeed + ' MPH <br/>';
+    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + humidity + ' % <br/>';
     bodyContentEl.innerHTML += '<strong>UV Index:</strong> ' + uvi + '<br/>';
     weatherBody.append(cityEl, bodyContentEl);
 
     todayWeather.append(weatherData);
 }
 
+function printFiveDay() {
+
+}
+
 function getWeather(event) {
     event.preventDefault();
 
     citySearch = document.querySelector("#city-search").value
+
+    if (!citySearch){
+        return alert("Please enter a search term")
+    }
 
     console.log(citySearch)
     var queryLongLatURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
@@ -109,7 +118,7 @@ function fetchWeather(URL) {
             return response.json();
         })
         .then(function (data) {
-            var cityURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + data[0].lat + '&lon=' + data[0].lon + '&exclude=minutely,hourly,alerts&units=metric&appid=' + APIKey
+            var cityURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + data[0].lat + '&lon=' + data[0].lon + '&exclude=minutely,hourly,alerts&units=imperial&appid=' + APIKey
 
             return fetch(cityURL)
                 .then(function (response) {
@@ -136,7 +145,6 @@ function renderCities() {
     savedCity = JSON.parse(localStorage.getItem("savedCity")) || [];
     for (var i = 0; i < savedCity.length; i++) {
         var newCity = savedCity[i];
-        //console.log(newCity)
 
         btn = document.createElement("a");
         btn.textContent = newCity.city
@@ -147,4 +155,4 @@ function renderCities() {
 }
 renderCities()
 submitForm.addEventListener("submit", getWeather)
-// submitForm.addEventListener("submit", renderCities)
+// btn.addEventListener("click", getWeather)
