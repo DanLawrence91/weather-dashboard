@@ -37,6 +37,9 @@ var temp;
 var humidity;
 var windSpeed;
 var uvi;
+var fiveTemp;
+var fiveHumidity;
+var fiveWindSpeed;
 var citySearch
 var todayWeather = document.querySelector("#today-weather")
 var weatherForecast = document.querySelector("#five-day-weather")
@@ -63,27 +66,27 @@ function printWeather() {
     bodyContentEl.innerHTML += '<strong>UV Index:</strong> ' + uvi + '<br/>';
     weatherBody.append(cityEl, bodyContentEl);
 
-    todayWeather.append(weatherData);
+    var titleEl = document.createElement('h3');
+    titleEl.textContent = '5 Day Forecast: ';
+
+    todayWeather.append(weatherData, titleEl);
 }
 
 function clearPastSearch() {
     todayWeather.innerHTML = ""
-}
-
-function printFiveDay() {
-
+    weatherForecast.innerHTML = ""
 }
 
 function getWeather(event) {
     event.preventDefault();
-    
+
     if (todayWeather) {
         clearPastSearch()
     }
 
     citySearch = document.querySelector("#city-search").value
 
-    if (!citySearch){
+    if (!citySearch) {
         return alert("Please enter a search term")
     }
 
@@ -120,7 +123,7 @@ function getWeather(event) {
 }
 
 function fetchWeather(URL) {
-    
+
     fetch(URL)
         .then(function (response) {
             return response.json();
@@ -133,24 +136,44 @@ function fetchWeather(URL) {
                     return response.json();
                 })
                 .then(function (data) {
-                    for (var i = 1; i < data.daily.length; i++){
-                        console.log(data.daily[i].temp.day)
-                        console.log(data.daily[i].humidity)
-                        console.log(data.daily[i].wind_speed)
+                    for (var i = 1; i <= 5; i++) {
+                        fiveTemp = data.daily[i].temp.day
+                        fiveHumidity = data.daily[i].humidity
+                        fiveWindSpeed = data.daily[i].wind_speed
+
+                        var weatherForecastData = document.createElement('div');
+                        weatherForecastData.classList.add('card', 'bg-light', 'text-dark', 'mb-3');
+
+                        var weatherForecastBody = document.createElement('div');
+                        weatherForecastBody.classList.add('card-body');
+                        weatherForecastData.append(weatherForecastBody);
+
+                        var dateEl = document.createElement('h4');
+                        var futureDate = moment().add(i, 'days')
+                        var futureText = futureDate.format("Do MMMM YYYY")
+                        dateEl.textContent = futureText
+
+                        var bodyForecastContentEl = document.createElement('p');
+
+                        // var weatherIcon = data.current.weather.icon
+
+                        bodyForecastContentEl.innerHTML += '<strong>Temp:</strong> ' + fiveTemp + ' °F <br/>';
+                        bodyForecastContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + fiveWindSpeed + ' MPH <br/>';
+                        bodyForecastContentEl.innerHTML += '<strong>Humidity:</strong> ' + fiveHumidity + ' % <br/>';
+                        weatherForecastBody.append(dateEl, bodyForecastContentEl);
+
+                        weatherForecast.append(weatherForecastData);
                     }
-                    console.log(data.daily[1].temp.day)
-                    console.log(data.daily[1].humidity)
-                    console.log(data.daily[1].wind_speed)
-        
+
                     temp = data.current.temp
                     humidity = data.current.humidity
                     windSpeed = data.current.wind_speed
                     uvi = data.current.uvi
-                    
+
                     printWeather(data)
                 })
         });
-    
+
 }
 
 // var city = 'London'
