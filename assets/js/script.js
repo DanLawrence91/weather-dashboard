@@ -66,12 +66,20 @@ function printWeather() {
     todayWeather.append(weatherData);
 }
 
+function clearPastSearch() {
+    todayWeather.innerHTML = ""
+}
+
 function printFiveDay() {
 
 }
 
 function getWeather(event) {
     event.preventDefault();
+    
+    if (todayWeather) {
+        clearPastSearch()
+    }
 
     citySearch = document.querySelector("#city-search").value
 
