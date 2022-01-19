@@ -37,7 +37,7 @@ var temp;
 var humidity;
 var windSpeed;
 var uvi;
-var citySearch;
+var citySearch
 var todayWeather = document.querySelector("#today-weather")
 var weatherForecast = document.querySelector("#five-day-weather")
 
@@ -133,16 +133,40 @@ function fetchWeather(URL) {
                     return response.json();
                 })
                 .then(function (data) {
+                    for (var i = 1; i < data.daily.length; i++){
+                        console.log(data.daily[i].temp.day)
+                        console.log(data.daily[i].humidity)
+                        console.log(data.daily[i].wind_speed)
+                    }
+                    console.log(data.daily[1].temp.day)
+                    console.log(data.daily[1].humidity)
+                    console.log(data.daily[1].wind_speed)
+        
                     temp = data.current.temp
                     humidity = data.current.humidity
                     windSpeed = data.current.wind_speed
                     uvi = data.current.uvi
-
+                    
                     printWeather(data)
                 })
         });
     
 }
+
+// var city = 'London'
+
+// var forecastURL = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=' + city + '&cnt=5&appid=' + APIKey
+
+// fetch(forecastURL)
+//     .then(function(response) {
+//         return response.json();
+//     })
+//     .then(function(data) {
+//         console.log(data)
+//         // console.log(data.list[2].main.temp)
+//         // console.log(data.list[2].main.humidity)
+//         // console.log(data.list[2].wind.speed)
+//     })
 
 // capitalise first letter of search for city for when data presented
 // var cityUsed = function capitalise(s) {
