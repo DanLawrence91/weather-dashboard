@@ -57,14 +57,31 @@ function printWeather() {
     cityEl.textContent = citySearch + ", " + date
 
     var bodyContentEl = document.createElement('p');
+    var uviEl = document.createElement('p')
+    var uviData = document.createElement('p') 
+    uviData.classList.add('btn')
+    uviData.innerHTML = uvi
+
+    uviEl.innerHTML = '<strong>UV Index:</strong> '
+    uviEl.append(uviData)
+
+    console.log(uviEl)
+    if (uvi <= 4){
+        uviData.classList.add('btn-success');
+    } else if (uvi <= 9 && uvi > 4){
+        uviData.classList.add('btn-warning');
+    } else {
+        uviData.classList.add('btn-danger');
+    }
 
     // var weatherIcon = data.current.weather.icon
 
     bodyContentEl.innerHTML += '<strong>Temp:</strong> ' + temp + ' °F <br/>';
     bodyContentEl.innerHTML += '<strong>Wind Speed:</strong> ' + windSpeed + ' MPH <br/>';
     bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + humidity + ' % <br/>';
-    bodyContentEl.innerHTML += '<strong>UV Index:</strong> ' + uvi + '<br/>';
-    weatherBody.append(cityEl, bodyContentEl);
+    
+    
+    weatherBody.append(cityEl, bodyContentEl, uviEl);
 
     var titleEl = document.createElement('h3');
     titleEl.textContent = '5 Day Forecast: ';
@@ -90,22 +107,18 @@ function getWeather(event) {
         return alert("Please enter a search term")
     }
 
-    console.log(citySearch)
     var queryLongLatURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
-
-    console.log(queryLongLatURL)
 
     //need to sort as replicates list when button pressed
     localStorage.setItem('city', citySearch)
     cityStorage = localStorage.getItem('city')
-    console.log(cityStorage)
 
     submitForm.reset();
 
     const storedCities = {
         city: cityStorage,
     }
-    console.log(storedCities)
+
     savedCity.push(storedCities);
     localStorage.setItem("savedCity", JSON.stringify(savedCity));
 
@@ -115,9 +128,6 @@ function getWeather(event) {
     btn.classList.add('btn', 'btn-light', 'm-2', 'w-100')
 
     historyEl.appendChild(btn)
-
-    console.log(savedCity)
-    console.log(savedCity.length)
 
     fetchWeather(queryLongLatURL)
 }
@@ -175,21 +185,6 @@ function fetchWeather(URL) {
         });
 
 }
-
-// var city = 'London'
-
-// var forecastURL = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=' + city + '&cnt=5&appid=' + APIKey
-
-// fetch(forecastURL)
-//     .then(function(response) {
-//         return response.json();
-//     })
-//     .then(function(data) {
-//         console.log(data)
-//         // console.log(data.list[2].main.temp)
-//         // console.log(data.list[2].main.humidity)
-//         // console.log(data.list[2].wind.speed)
-//     })
 
 // capitalise first letter of search for city for when data presented
 // var cityUsed = function capitalise(s) {
