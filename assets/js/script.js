@@ -63,11 +63,13 @@ function printWeather() {
     var date = moment().format("Do MMMM YYYY")
     var iconEl = document.createElement('img')
     iconEl.src = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
+    
     if (citySearch) {
         cityEl.textContent = citySearch + ", " + date
-    } else {
+    } else if (!citySearch) {
         cityEl.textContent = pastCity + ", " + date
-    }
+    } 
+
     cityEl.append(iconEl)
 
     var bodyContentEl = document.createElement('p');
@@ -151,6 +153,8 @@ function getWeather(event) {
         return alert("Please enter a search term")
     }
 
+    
+
     var queryLongLatURL = 'https://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
 
     //need to sort as replicates list when button pressed
@@ -167,7 +171,7 @@ function getWeather(event) {
     localStorage.setItem("savedCity", JSON.stringify(savedCity));
 
     btn = document.createElement("a");
-    //need to set so when button pressed it changes display
+    
     btn.textContent = cityStorage
     btn.classList.add('btn', 'btn-light', 'm-2', 'w-100', 'searchBTN')
     btn.addEventListener('click', historySearch)
@@ -186,8 +190,12 @@ function fetchWeather(URL) {
             return response.json();
         })
         .then(function (data) {
+            if (data.length === 0) {
+                return alert("Please check spelling of city as this has not been found")
+            }
+            console.log(data)
             var cityURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + data[0].lat + '&lon=' + data[0].lon + '&exclude=minutely,hourly,alerts&units=imperial&appid=' + APIKey
-
+            
             return fetch(cityURL)
                 .then(function (response) {
                     return response.json();
