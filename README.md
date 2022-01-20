@@ -19,3 +19,7 @@
 
 - This is a screenshot showing how the data is displayed once a city has been searched for:
 ![screenshot showing displayed weather data](./assets/images/searched-city.png)
+
+## Future Features
+
+- Futures features could include a toggle between imperial and metric units on the weather data
