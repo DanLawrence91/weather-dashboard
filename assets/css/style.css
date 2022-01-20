@@ -1,6 +1,7 @@
-h1 {
+#header {
     text-align: center;
     width: 100vw;
-    background-color: blue;
+    background-image: linear-gradient(to right, rgb(22, 7, 160), rgb(28, 150, 231));
     margin-left: -15px;
+    color: white;
 }

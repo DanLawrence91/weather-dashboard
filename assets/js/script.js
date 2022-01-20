@@ -13,7 +13,7 @@ which will then be used in fetch from one call on openweather to get todays date
 save geocoding data to json and then use variables from this in search fecth for one call api - DONE
 
 underneath this is an empty area that will be filled by buttons containing past cities searched for, if they are clicked they
-will then search for that city again - DONE except for changing display to that city
+will then search for that city again - DONE
 
 On other part of page there are two elements:
 First shows a section that highlights todays weather and includes date, city name, icon of weather, temperature, humidity,
@@ -104,7 +104,7 @@ function printWeather() {
 // to show different bits of information about the weather for next 5 days
 function printForecast() {
     var weatherForecastData = document.createElement('div');
-    weatherForecastData.classList.add('card', 'bg-light', 'text-dark', 'm-1');
+    weatherForecastData.classList.add('card', 'bg-dark', 'text-light', 'm-1');
 
     var weatherForecastBody = document.createElement('div');
     weatherForecastBody.classList.add('card-body', 'p-2');
@@ -237,10 +237,9 @@ function renderCities() {
 renderCities()
 submitForm.addEventListener("submit", getWeather)
 
+// event listener function for search history so that when button is pressed it searches for the city in it
 function historySearch(event) {
     pastCity = event.target.textContent
-    console.log(event.target)
-    console.log(event.target.textContent)
     var historyCityURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + pastCity + '&appid=' + APIKey
     clearPastSearch()
     fetchWeather(historyCityURL)
