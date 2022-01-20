@@ -251,7 +251,7 @@ function renderCities() {
         var newCity = savedCity[i];
 
         btn = document.createElement("button");
-        btn.textContent = newCity.city
+        btn.textContent = newCity
         btn.classList.add('btn', 'btn-light', 'm-2', 'w-100', 'searchBTN')
         btn.addEventListener('click', historySearch)
 
