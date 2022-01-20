@@ -153,8 +153,6 @@ function getWeather(event) {
         return alert("Please enter a search term")
     }
 
-    
-
     var queryLongLatURL = 'https://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
 
     //need to sort as replicates list when button pressed
@@ -249,6 +247,7 @@ submitForm.addEventListener("submit", getWeather)
 function historySearch(event) {
     pastCity = event.target.textContent
     var historyCityURL = 'https://api.openweathermap.org/geo/1.0/direct?q=' + pastCity + '&appid=' + APIKey
+    citySearch = pastCity
     clearPastSearch()
     fetchWeather(historyCityURL)
 }
