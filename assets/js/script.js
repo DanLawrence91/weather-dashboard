@@ -31,6 +31,7 @@ var APIKey = "68f6f76ac8c1ec3fb198c68558825996"
 var submitForm = document.querySelector("#search-form")
 var cityStorage;
 var historyEl = document.querySelector("#weather-history")
+var searchBTN = document.querySelector(".searchBTN")
 var savedCity;
 var btn;
 var temp;
@@ -44,6 +45,7 @@ var fiveWindSpeed;
 var fiveWeatherIcon;
 var citySearch;
 var i;
+var pastCity;
 var todayWeather = document.querySelector("#today-weather")
 var weatherForecast = document.querySelector("#five-day-weather")
 
@@ -61,7 +63,11 @@ function printWeather() {
     var date = moment().format("Do MMMM YYYY")
     var iconEl = document.createElement('img')
     iconEl.src = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
-    cityEl.textContent = citySearch + ", " + date
+    if (citySearch) {
+        cityEl.textContent = citySearch + ", " + date
+    } else {
+        cityEl.textContent = pastCity + ", " + date
+    }
     cityEl.append(iconEl)
 
     var bodyContentEl = document.createElement('p');
@@ -163,7 +169,8 @@ function getWeather(event) {
     btn = document.createElement("a");
     //need to set so when button pressed it changes display
     btn.textContent = cityStorage
-    btn.classList.add('btn', 'btn-light', 'm-2', 'w-100')
+    btn.classList.add('btn', 'btn-light', 'm-2', 'w-100', 'searchBTN')
+    btn.addEventListener('click', historySearch)
 
     historyEl.appendChild(btn)
 
@@ -220,7 +227,8 @@ function renderCities() {
 
         btn = document.createElement("button");
         btn.textContent = newCity.city
-        btn.classList.add('btn', 'btn-light', 'm-2', 'w-100')
+        btn.classList.add('btn', 'btn-light', 'm-2', 'w-100', 'searchBTN')
+        btn.addEventListener('click', historySearch)
 
         historyEl.appendChild(btn)
     }
@@ -228,6 +236,12 @@ function renderCities() {
 
 renderCities()
 submitForm.addEventListener("submit", getWeather)
-btn.addEventListener("click", function () {
-    
-})
+
+function historySearch(event) {
+    pastCity = event.target.textContent
+    console.log(event.target)
+    console.log(event.target.textContent)
+    var historyCityURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + pastCity + '&appid=' + APIKey
+    clearPastSearch()
+    fetchWeather(historyCityURL)
+}
