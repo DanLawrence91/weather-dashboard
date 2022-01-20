@@ -23,3 +23,5 @@
 ## Future Features
 
 - Futures features could include a toggle between imperial and metric units on the weather data
+
+- Another would be to have a clear button so that the search history does not become too long
