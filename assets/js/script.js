@@ -62,7 +62,7 @@ function printWeather() {
     var cityEl = document.createElement('h3');
     var date = moment().format("Do MMMM YYYY")
     var iconEl = document.createElement('img')
-    iconEl.src = "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
+    iconEl.src = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
     if (citySearch) {
         cityEl.textContent = citySearch + ", " + date
     } else {
@@ -117,7 +117,7 @@ function printForecast() {
 
 
     var iconForecastEl = document.createElement('img')
-    iconForecastEl.src = "http://openweathermap.org/img/wn/" + fiveWeatherIcon + "@2x.png"
+    iconForecastEl.src = "https://openweathermap.org/img/wn/" + fiveWeatherIcon + "@2x.png"
 
     var bodyForecastContentEl = document.createElement('p');
 
@@ -151,7 +151,7 @@ function getWeather(event) {
         return alert("Please enter a search term")
     }
 
-    var queryLongLatURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
+    var queryLongLatURL = 'https://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
 
     //need to sort as replicates list when button pressed
     localStorage.setItem('city', citySearch)
@@ -240,7 +240,7 @@ submitForm.addEventListener("submit", getWeather)
 // event listener function for search history so that when button is pressed it searches for the city in it
 function historySearch(event) {
     pastCity = event.target.textContent
-    var historyCityURL = 'http://api.openweathermap.org/geo/1.0/direct?q=' + pastCity + '&appid=' + APIKey
+    var historyCityURL = 'https://api.openweathermap.org/geo/1.0/direct?q=' + pastCity + '&appid=' + APIKey
     clearPastSearch()
     fetchWeather(historyCityURL)
 }
