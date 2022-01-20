@@ -63,12 +63,12 @@ function printWeather() {
     var date = moment().format("Do MMMM YYYY")
     var iconEl = document.createElement('img')
     iconEl.src = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
-    
+
     if (citySearch) {
         cityEl.textContent = citySearch + ", " + date
     } else if (!citySearch) {
         cityEl.textContent = pastCity + ", " + date
-    } 
+    }
 
     cityEl.append(iconEl)
 
@@ -156,25 +156,25 @@ function getWeather(event) {
     var queryLongLatURL = 'https://api.openweathermap.org/geo/1.0/direct?q=' + citySearch + '&appid=' + APIKey
 
     //need to sort as replicates list when button pressed
-    localStorage.setItem('city', citySearch)
-    cityStorage = localStorage.getItem('city')
+    // localStorage.setItem('city', citySearch)
+    // cityStorage = localStorage.getItem('city')
 
     submitForm.reset();
 
-    const storedCities = {
-        city: cityStorage,
-    }
+    // const storedCities = {
+    //     city: cityStorage,
+    // }
 
-    savedCity.push(storedCities);
-    localStorage.setItem("savedCity", JSON.stringify(savedCity));
+    // savedCity.push(storedCities);
+    // localStorage.setItem("savedCity", JSON.stringify(savedCity));
 
-    btn = document.createElement("a");
-    
-    btn.textContent = cityStorage
-    btn.classList.add('btn', 'btn-light', 'm-2', 'w-100', 'searchBTN')
-    btn.addEventListener('click', historySearch)
+    // btn = document.createElement("a");
 
-    historyEl.appendChild(btn)
+    // btn.textContent = cityStorage
+    // btn.classList.add('btn', 'btn-light', 'm-2', 'w-100', 'searchBTN')
+    // btn.addEventListener('click', historySearch)
+
+    // historyEl.appendChild(btn)
 
     fetchWeather(queryLongLatURL)
 }
@@ -190,10 +190,29 @@ function fetchWeather(URL) {
         .then(function (data) {
             if (data.length === 0) {
                 return alert("Please check spelling of city as this has not been found")
+            } else {
+                //need to stop new button added if use search history button
+                localStorage.setItem('city', citySearch);
+                cityStorage = localStorage.getItem('city');
+                const storedCities = cityStorage;
+
+                console.log(storedCities)
+                if (savedCity.indexOf(storedCities) == -1) {
+                    savedCity.push(storedCities);
+                    localStorage.setItem("savedCity", JSON.stringify(savedCity));
+                    btn = document.createElement("a");
+
+                    btn.textContent = cityStorage
+                    btn.classList.add('btn', 'btn-light', 'm-2', 'w-100', 'searchBTN')
+                    btn.addEventListener('click', historySearch)
+
+                    historyEl.appendChild(btn)
+                } 
+
             }
             console.log(data)
             var cityURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + data[0].lat + '&lon=' + data[0].lon + '&exclude=minutely,hourly,alerts&units=imperial&appid=' + APIKey
-            
+
             return fetch(cityURL)
                 .then(function (response) {
                     return response.json();
@@ -221,7 +240,7 @@ function fetchWeather(URL) {
 }
 
 // capitalise first letter of search for city for when data presented
-// var cityUsed = function capitalise(s) {
+// function capitalise(s) {
 //     return s[0].toUpperCase() + s.slice(1);
 // }
 
