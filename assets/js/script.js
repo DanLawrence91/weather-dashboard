@@ -65,7 +65,7 @@ function printWeather() {
     iconEl.src = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png"
 
     if (citySearch) {
-        cityEl.textContent = capitalize(citySearch) + ", " + date
+        cityEl.textContent = capitalise(citySearch) + ", " + date
     } else if (!citySearch) {
         cityEl.textContent = pastCity + ", " + date
     }
@@ -172,7 +172,7 @@ function fetchWeather(URL) {
             if (data.length === 0) {
                 return alert("Please check spelling of city as this has not been found")
             } else {
-                localStorage.setItem('city', capitalize(citySearch));
+                localStorage.setItem('city', capitalise(citySearch));
                 cityStorage = localStorage.getItem('city');
                 const storedCities = cityStorage;
 
@@ -220,7 +220,7 @@ function fetchWeather(URL) {
 }
 
 // capitalise first letter of search for city for when data presented
-function capitalize(str){
+function capitalise(str){
     return str.substring(0, 1).toUpperCase() + str.substring(1);
 }
 
@@ -246,7 +246,7 @@ submitForm.addEventListener("submit", getWeather)
 function historySearch(event) {
     pastCity = event.target.textContent
     var historyCityURL = 'https://api.openweathermap.org/geo/1.0/direct?q=' + pastCity + '&appid=' + APIKey
-    citySearch = capitalize(pastCity)
+    citySearch = capitalise(pastCity)
     clearPastSearch()
     fetchWeather(historyCityURL)
 }
