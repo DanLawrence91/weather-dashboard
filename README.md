@@ -2,6 +2,8 @@
 
 ## Description
 
+- [Go to future features](#future-features)
+
 - The aim of this project is provide a dashboard that searches for the weather both for today and the next 5 days using an API. I have chosen to use the OpenWeatherMap API to provide the data and icons for the weather results.
 
 - Users can both search for a new city or search for a city that has already been searched for from the corresponding button for that city in the search history.
